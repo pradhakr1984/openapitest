@@ -5,6 +5,7 @@ import TextInputBox from '@/components/TextInputBox'
 import TemperatureSlider from '@/components/TemperatureSlider'
 import CostEstimator from '@/components/CostEstimator'
 import OutputBox from '@/components/OutputBox'
+import FileUpload from '@/components/FileUpload'
 
 export default function Home() {
   const [article, setArticle] = useState('')
@@ -14,6 +15,7 @@ export default function Home() {
   const [error, setError] = useState('')
   const [tokenCount, setTokenCount] = useState(0)
   const [estimatedCost, setEstimatedCost] = useState(0)
+  const [uploadedFileName, setUploadedFileName] = useState('')
 
   const handleSummarize = async () => {
     if (!article.trim()) {
@@ -50,6 +52,23 @@ export default function Home() {
     }
   }
 
+  const handleFileUpload = (text: string, fileName?: string) => {
+    setArticle(text)
+    setUploadedFileName(fileName || 'Uploaded file')
+    setError('')
+  }
+
+  const handleFileError = (message: string) => {
+    setError(message)
+  }
+
+  const clearText = () => {
+    setArticle('')
+    setUploadedFileName('')
+    setSummary('')
+    setError('')
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="text-center mb-8">
@@ -57,7 +76,7 @@ export default function Home() {
           OpenAI API Summarizer Demo
         </h1>
         <p className="text-gray-600">
-          Paste an article, adjust temperature, and see how AI summarizes it
+          Paste an article, upload a file, adjust temperature, and see how AI summarizes it
         </p>
       </header>
 
@@ -66,11 +85,54 @@ export default function Home() {
         <div className="space-y-6">
           <div className="card">
             <h2 className="text-xl font-semibold mb-4">Input</h2>
-            <TextInputBox
-              value={article}
-              onChange={setArticle}
-              placeholder="Paste your article here..."
-            />
+            
+            {/* File Upload */}
+            <div className="mb-4">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Upload File</h3>
+              <FileUpload 
+                onTextExtracted={handleFileUpload}
+                onError={handleFileError}
+              />
+            </div>
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">or</span>
+              </div>
+            </div>
+
+            {/* Text Input */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Paste Text</h3>
+              <TextInputBox
+                value={article}
+                onChange={setArticle}
+                placeholder="Paste your article here..."
+              />
+            </div>
+
+            {/* File Info */}
+            {uploadedFileName && (
+              <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  📎 File loaded: {uploadedFileName}
+                </p>
+              </div>
+            )}
+
+            {/* Clear Button */}
+            {article && (
+              <button
+                onClick={clearText}
+                className="mt-2 text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Clear text
+              </button>
+            )}
           </div>
 
           <div className="card">
