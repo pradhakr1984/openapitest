@@ -152,10 +152,10 @@ export default function FileUpload({ onTextExtracted, onError }: FileUploadProps
   return (
     <div className="space-y-4">
       <div
-        className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+        className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
           isDragging
-            ? 'border-primary-500 bg-primary-50'
-            : 'border-gray-300 hover:border-primary-400'
+            ? 'border-blue-500 bg-gradient-to-r from-blue-50 to-purple-50 scale-105 shadow-xl'
+            : 'border-gray-300 hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:scale-[1.02] shadow-lg hover:shadow-xl'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -171,27 +171,35 @@ export default function FileUpload({ onTextExtracted, onError }: FileUploadProps
         />
         
         {isProcessing ? (
-          <div className="space-y-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
-            <p className="text-sm text-gray-600">Processing file...</p>
+          <div className="space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="text-lg font-medium text-gray-700">Processing file...</p>
+            <div className="w-32 h-2 bg-gray-200 rounded-full mx-auto overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse-slow"></div>
+            </div>
           </div>
         ) : (
-          <div className="space-y-2">
-            <div className="text-4xl mb-2">📎</div>
-            <p className="text-sm font-medium text-gray-700">
+          <div className="space-y-4">
+            <div className="text-6xl mb-4 animate-float">📎</div>
+            <p className="text-lg font-semibold text-gray-700">
               Drop a file here or click to browse
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm text-gray-500">
               Supports .txt, .pdf, .docx files (max 5MB)
             </p>
+            <div className="flex justify-center items-center gap-2 text-xs text-gray-400">
+              <span>📄</span>
+              <span>📊</span>
+              <span>📝</span>
+            </div>
           </div>
         )}
       </div>
       
-      <div className="text-xs text-gray-500 text-center">
-        <p>Supported formats: .txt, .pdf, .docx</p>
+      <div className="text-xs text-gray-500 text-center space-y-1">
+        <p className="font-medium">Supported formats: .txt, .pdf, .docx</p>
         <p>Maximum file size: 5MB</p>
-        <p className="text-orange-600 mt-1">Note: PDF and Word files work best with .txt files for now</p>
+        <p className="text-orange-600 mt-2 font-medium">💡 Tip: .txt files work best for immediate processing</p>
       </div>
     </div>
   )
